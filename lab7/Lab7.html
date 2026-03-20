@@ -1,0 +1,185 @@
+<!-- Завдання 1: Першим буде big.js, бо його строка коду прописана першою -->
+
+<!-- Завдання 2:
+1. x = 5
+2. Так, бо це "true"
+3. --><script>var admin, name; name = "Василь"; admin = name; console.log(admin);</script>
+
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Лаба</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      section { border: 1px solid #ddd; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+      h2 { margin: 0 0 10px 0; font-size: 18px; }
+      input { padding: 8px; width: 360px; max-width: 100%; }
+      button { padding: 8px 12px; cursor: pointer; }
+      .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+      .msg { color: #666; font-size: 12px; margin-top: 6px; }
+      #outCode { margin-top: 10px; font-weight: 700; }
+
+      #scene {
+        position: relative;
+        height: 90px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #f7f7f7;
+        overflow: hidden;
+      }
+      #elid {
+        width: 50px;
+        height: 50px;
+        background: #c41212;
+        position: absolute;
+        left: 10px;
+        top: 20px;
+        transition: transform 300ms ease;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Зав 3 -->
+    <section>
+      <h2>Робота з API (Fetch) та фільтрація</h2>
+
+      <div class="row">
+        <input id="countyInput" type="text" />
+        <button id="btnFind" type="button">Знайти код</button>
+      </div>
+
+      <div id="status" class="msg"></div>
+      <div id="outCode"></div>
+    </section>
+
+    <!-- Зав 4 -->
+    <section>
+      <h2>Валідація форми та події</h2>
+
+      <form id="userForm">
+        <div class="row">
+          <input id="name" name="name" type="text" placeholder="Ім'я" />
+          <input id="last-name" name="last-name" type="text" placeholder="Прізвище" />
+          <input id="email" name="email" type="email" placeholder="Емейл" />
+          <button type="submit">Ок</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Зав 5 -->
+    <section>
+      <h2>Анімація та взаємодія</h2>
+
+      <div id="scene">
+        <div id="elid"></div>
+      </div>
+
+      <div class="row" style="margin-top: 20px;">
+        <button id="leftBtn" type="button">Вліво</button>
+        <button id="rightBtn" type="button">Вправо</button>
+      </div>
+    </section>
+
+    <script>
+      // JS Зав 3
+      const API_URL = 
+      "https://api.census.gov/data/2020/acs/acs5/profile?get=NAME&for=county:*";
+
+      let counties = [];
+      let loaded = false;
+
+      async function fetchCounties() {
+        const statusEl = document.getElementById("status");
+        statusEl.textContent = "Загрузка";
+
+        try {
+          const res = await fetch(API_URL);
+          if (!res.ok) throw new Error("HTTP " + res.status);
+
+          const data = await res.json();
+
+          counties = data.slice(1).map((row) => ({
+            name: row[0],
+            state: row[1],
+            county: row[2],
+          }));
+
+          loaded = true;
+          statusEl.textContent = `Завантажено ${counties.length} округ(ів)`;
+        } catch (e) {
+          loaded = false;
+          statusEl.textContent = "Помилка завантаження";
+        }
+      }
+
+      function getCountyCodeByName(countyName) {
+        const n = String(countyName || "").trim().toLowerCase();
+        if (!n) return "";
+
+        const found = counties.find((c) => c.name.toLowerCase() === n);
+        return found ? (found.state + found.county) : "Округ не знайдений";
+      }
+
+      function handleFind() {
+        const input = document.getElementById("countyInput").value;
+        const out = document.getElementById("outCode");
+
+        if (!loaded) {
+          out.textContent = "Дані не завантажені";
+          return;
+        }
+
+        const code = getCountyCodeByName(input);
+        console.log(code);
+        out.textContent = code;
+      }
+
+      document.getElementById("btnFind").addEventListener("click", handleFind);
+      document.getElementById("countyInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleFind();
+      });
+
+      fetchCounties();
+
+      // JS Зав 4
+      document.getElementById("userForm").addEventListener("submit", (event) => {
+        const first = document.getElementById("name").value.trim();
+        const last  = document.getElementById("last-name").value.trim();
+        const email = document.getElementById("email").value.trim();
+
+        if (!first || !last || !email) {
+          event.preventDefault();
+          alert("Треба заповнити всі поля");
+          return;
+        }
+
+        event.preventDefault();
+        alert(`Ім'я: ${first}\nПрізвище: ${last}\nЕмейл: ${email}`);
+      });
+
+      // JS Зав 5
+      let x = 0;
+      const el = document.getElementById("elid");
+
+      function render() {
+        el.style.transform = `translateX(${x}px)`;
+      }
+
+      document.getElementById("leftBtn").addEventListener("click", () => {
+        x -= 100;
+        render();
+      });
+
+      document.getElementById("rightBtn").addEventListener("click", () => {
+        x += 100;
+        render();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
