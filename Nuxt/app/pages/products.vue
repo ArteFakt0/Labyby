@@ -29,74 +29,11 @@ type PricingPlan = {
   tool3Text: string
 }
 
-const plans: PricingPlan[] = [
-  {
-    id: 1,
-    planName: 'Starter',
-    titleSuffix: 'Annual',
-    trialText: '3-days free then:',
-    pricePerMonthText: '83.25',
-    billedYearlyOldText: '1,188',
-    billedYearlyNewText: '999',
-    savingsText: '189',
-    freeMembersText: 'Primary user only',
-    extraMemberPriceText: '(extra team members for $35/month)',
-    exportsText: '10,000 exports',
-    exportsExtraText: '(additional exports at $0.02 each)',
-    skipTracesText: '500 free skip traces',
-    skipTracesExtraText: '(additional skip tracing at $0.08 each)',
-    importText: 'Imports $0.01',
-    freeText: 'FREE',
-    freeSubText: 'daily product trainings and support',
-    tool1Text: 'Full suite of next-gen investing tools',
-    tool2Text: 'Industry first AI powered comp tool',
-    tool3Text: 'Includes dedicated support agent'
-  },
-  {
-    id: 2,
-    planName: 'Team',
-    titleSuffix: 'Annual',
-    trialText: '3-days free then:',
-    pricePerMonthText: '207.50',
-    billedYearlyOldText: '2,988',
-    billedYearlyNewText: '2,490',
-    savingsText: '498',
-    freeMembersText: 'Primary user + 2 free team members',
-    extraMemberPriceText: '(extra team members for $25/month)',
-    exportsText: '50,000 exports',
-    exportsExtraText: '(additional exports at $0.01 each)',
-    skipTracesText: '1,000 free skip traces',
-    skipTracesExtraText: '(additional skip tracing at $0.08 each)',
-    importText: 'Imports $0.01',
-    freeText: 'FREE',
-    freeSubText: 'daily product trainings and support',
-    tool1Text: 'Full suite of next-gen investing tools',
-    tool2Text: 'Industry first AI powered comp tool',
-    tool3Text: 'Includes dedicated support agent'
-  },
-  {
-    id: 3,
-    planName: 'Business',
-    titleSuffix: 'Annual',
-    trialText: '3-days free then:',
-    pricePerMonthText: '457.50',
-    billedYearlyOldText: '6,588',
-    billedYearlyNewText: '5,490',
-    savingsText: '1,098',
-    freeMembersText: 'Primary user + 6 free team members',
-    extraMemberPriceText: '(extra team members for $20/month)',
-    exportsText: '100,000 exports',
-    exportsExtraText: '(additional exports at $0.01 each)',
-    skipTracesText: '2,000 free skip traces',
-    skipTracesExtraText: '(additional skip tracing at $0.08 each)',
-    importText: 'Imports $0.01',
-    freeText: 'FREE',
-    freeSubText: 'daily product trainings and support',
-    tool1Text: 'Full suite of next-gen investing tools',
-    tool2Text: 'Industry first AI powered comp tool',
-    tool3Text: 'Includes dedicated support agent'
-  }
-]
+const { data: plansData } = useFetch<PricingPlan[]>('/api/plans', {
+  default: () => []
+})
+
+const plans = computed(() => plansData.value)
 </script>
 
 <template>
@@ -165,7 +102,7 @@ const plans: PricingPlan[] = [
             </div>
 
             <div class="mt-6">
-              <button class="w-full rounded-md bg-gradient-to-r from-amber-400 to-orange-500 py-2.5 text-sm font-semibold text-white hover:from-amber-500 hover:to-orange-600">
+              <button class="w-full rounded-md bg-gradient-to-r from-amber-400 to-orange-500 py-2.5 text-sm font-semibold text-black hover:from-amber-500 hover:to-orange-600">
                 Try It Free
               </button>
             </div>
