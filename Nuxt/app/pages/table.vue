@@ -3,9 +3,6 @@ useHead({
   title: 'Таблиця'
 })
 
-const colorMode = useColorMode()
-colorMode.preference = 'light'
-
 type Product = {
   id: number
   title: string
@@ -181,9 +178,6 @@ watch([q, pageSize], () => {
 <template>
   <div class="min-h-screen bg-white">
     <UContainer class="py-10">
-      <h1 class="text-3xl font-semibold text-slate-900">
-        Таблиця
-      </h1>
 
       <UCard class="mt-6 border border-slate-200 shadow-sm">
         <template #header>
