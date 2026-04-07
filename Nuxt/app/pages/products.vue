@@ -107,10 +107,10 @@ const plans: PricingPlan[] = [
           Start Your 3 Day Free Trial
         </h1>
 
-        <div class="flex items-center gap-3">
-          <div class="flex items-center gap-2 text-sm text-emerald-600">
+        <div class="shrink-2 text-emerald-600">
+          <div class="flex items-center gap-2 text-sm text-emerald-600 -ml-29">
             <span>Save up to 20%</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" class="text-emerald-600"><path fill="currentColor" d="M7 21a1 1 0 0 1-1-1V9a1 1 0 1 1 2 0v8.586L20.293 5.293a1 1 0 1 1 1.414 1.414L9.414 19H18a1 1 0 1 1 0 2z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" class="shrink-0 text-emerald-600"><path fill="currentColor" fill-rule="evenodd" d="M11.28 13.53a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06L10 11.19V7a3.25 3.25 0 0 0-6.5 0v1A.75.75 0 0 1 2 8V7a4.75 4.75 0 0 1 9.5 0v4.19l1.72-1.72a.75.75 0 1 1 1.06 1.06z" clip-rule="evenodd"/></svg>
           </div>
 
           <div class="inline-flex rounded-md border border-slate-200 bg-white p-1">
@@ -193,7 +193,7 @@ const plans: PricingPlan[] = [
                 </li>
 
                 <li class="flex gap-3">
-                  <span class="mt-1 text-emerald-400">
+                  <span class="mt-0 text-emerald-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                       <defs>
                         <linearGradient :id="`spark-${p.id}-2`" x1="0" y1="0" x2="1" y2="1">
@@ -208,7 +208,7 @@ const plans: PricingPlan[] = [
                 </li>
 
                 <li class="flex gap-3">
-                  <span class="mt-1 text-emerald-400">
+                  <span class="mt-2 text-emerald-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                       <defs>
                         <linearGradient :id="`spark-${p.id}-3`" x1="0" y1="0" x2="1" y2="1">
@@ -226,7 +226,7 @@ const plans: PricingPlan[] = [
                 </li>
 
                 <li class="flex gap-3">
-                  <span class="mt-1 text-emerald-400">
+                  <span class="mt-2 text-emerald-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                       <defs>
                         <linearGradient :id="`spark-${p.id}-4`" x1="0" y1="0" x2="1" y2="1">
@@ -244,7 +244,7 @@ const plans: PricingPlan[] = [
                 </li>
 
                 <li class="flex gap-3">
-                  <span class="mt-1 text-emerald-400">
+                  <span class="mt-0 text-emerald-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                       <defs>
                         <linearGradient :id="`spark-${p.id}-5`" x1="0" y1="0" x2="1" y2="1">
@@ -259,7 +259,7 @@ const plans: PricingPlan[] = [
                 </li>
 
                 <li class="flex gap-3">
-                  <span class="mt-1 text-emerald-400">
+                  <span class="mt-2 text-emerald-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                       <defs>
                         <linearGradient :id="`spark-${p.id}-6`" x1="0" y1="0" x2="1" y2="1">
@@ -277,7 +277,7 @@ const plans: PricingPlan[] = [
                 </li>
 
                 <li class="flex gap-3">
-                  <span class="mt-1 text-emerald-400">
+                  <span class="mt-0 text-emerald-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                       <defs>
                         <linearGradient :id="`spark-${p.id}-7`" x1="0" y1="0" x2="1" y2="1">
@@ -292,7 +292,7 @@ const plans: PricingPlan[] = [
                 </li>
 
                 <li class="flex gap-3">
-                  <span class="mt-1 text-emerald-400">
+                  <span class="mt-0 text-emerald-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                       <defs>
                         <linearGradient :id="`spark-${p.id}-8`" x1="0" y1="0" x2="1" y2="1">
@@ -307,7 +307,7 @@ const plans: PricingPlan[] = [
                 </li>
 
                 <li class="flex gap-3">
-                  <span class="mt-1 text-emerald-400">
+                  <span class="mt-0 text-emerald-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                       <defs>
                         <linearGradient :id="`spark-${p.id}-9`" x1="0" y1="0" x2="1" y2="1">
