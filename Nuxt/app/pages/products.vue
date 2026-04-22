@@ -1,9 +1,22 @@
 <script setup lang="ts">
+import type { PricingPlan } from '~/types/pricing'
+
 useHead({
   title: 'Список продуктів'
 })
 
 const { plans } = usePlans()
+const subscriptionStore = useSubscriptionStore()
+
+function getCheckoutLink(planName: PricingPlan['planName']) {
+  const plan = planName.toLowerCase()
+  return `/checkout?plan=${plan}`
+}
+
+function selectSubscription(plan: PricingPlan) {
+  subscriptionStore.setSelectedSubscription(plan)
+  return navigateTo(getCheckoutLink(plan.planName))
+}
 </script>
 
 <template>
@@ -40,7 +53,11 @@ const { plans } = usePlans()
       <div class="mt-8 grid gap-6 lg:grid-cols-3">
         <SubscriptionPlanCard v-for="p in plans" :key="p.id" :plan="p" id-prefix="spark">
           <template #cta>
-            <button class="w-full rounded-md bg-gradient-to-r from-amber-400 to-orange-500 py-2.5 text-sm font-semibold text-black hover:from-amber-500 hover:to-orange-600">
+            <button
+              class="block w-full rounded-md bg-gradient-to-r from-amber-400 to-orange-500 py-2.5 text-center text-sm font-semibold text-black hover:from-amber-500 hover:to-orange-600"
+              type="button"
+              @click="selectSubscription(p)"
+            >
               Try It Free
             </button>
           </template>

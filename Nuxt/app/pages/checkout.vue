@@ -5,7 +5,7 @@ useHead({
   title: 'Checkout'
 })
 
- import type { PricingPlan } from '~/types/pricing'
+import type { PricingPlan } from '~/types/pricing'
 
 type PlanQuery = 'starter' | 'team' | 'business'
 
@@ -22,6 +22,8 @@ type SubscriptionCreateBody = {
 }
 
 const route = useRoute()
+const subscriptionStore = useSubscriptionStore()
+const { selectedSubscription } = storeToRefs(subscriptionStore)
 
 const planQuery = computed<PlanQuery | null>(() => {
   const raw = route.query.plan
@@ -44,13 +46,28 @@ function planNameFromQuery(q: PlanQuery): PricingPlan['planName'] {
   return 'Team'
 }
 
-const selectedPlan = computed<PricingPlan | null>(() => {
-  if (!planQuery.value)
+function findPlanByQuery(q: PlanQuery | null, plans: PricingPlan[]) {
+  if (!q)
     return null
 
-  const target = planNameFromQuery(planQuery.value)
-  return plansData.value.find(p => p.planName === target) ?? null
+  const target = planNameFromQuery(q)
+  return plans.find(p => p.planName === target) ?? null
+}
+
+const selectedPlan = computed<PricingPlan | null>(() => {
+  return selectedSubscription.value ?? findPlanByQuery(planQuery.value, plansData.value)
 })
+
+watch([planQuery, plansData], ([query, plans]) => {
+  const matchedPlan = findPlanByQuery(query, plans)
+  if (matchedPlan && selectedSubscription.value?.id !== matchedPlan.id)
+    subscriptionStore.setSelectedSubscription(matchedPlan)
+}, { immediate: true })
+
+function selectCheckoutPlan(plan: PricingPlan) {
+  subscriptionStore.setSelectedSubscription(plan)
+  return navigateTo(`/checkout?plan=${plan.planName.toLowerCase()}`)
+}
 
 function toAmount(value: string) {
   if (typeof value !== 'string')
@@ -187,29 +204,32 @@ async function submit() {
       />
 
       <div v-else class="mt-8">
-        <div v-if="!planQuery" class="rounded-xl border border-slate-200 bg-white shadow-sm p-6">
+        <div v-if="!selectedPlan" class="rounded-xl border border-slate-200 bg-white shadow-sm p-6">
           <p class="text-sm font-medium text-slate-900">
             Select plan
           </p>
           <div class="mt-4 flex flex-wrap gap-3">
-            <NuxtLink
-              to="/checkout?plan=starter"
+            <button
               class="rounded-md border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+              type="button"
+              @click="selectCheckoutPlan(plansData.find(p => p.planName === 'Starter')!)"
             >
               Starter
-            </NuxtLink>
-            <NuxtLink
-              to="/checkout?plan=team"
+            </button>
+            <button
               class="rounded-md border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+              type="button"
+              @click="selectCheckoutPlan(plansData.find(p => p.planName === 'Team')!)"
             >
               Team
-            </NuxtLink>
-            <NuxtLink
-              to="/checkout?plan=business"
+            </button>
+            <button
               class="rounded-md border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+              type="button"
+              @click="selectCheckoutPlan(plansData.find(p => p.planName === 'Business')!)"
             >
               Business
-            </NuxtLink>
+            </button>
           </div>
         </div>
 
@@ -231,6 +251,18 @@ async function submit() {
             <h3 class="text-sm font-semibold text-slate-900">
               Order Summary
             </h3>
+
+            <div class="mt-4 rounded-md bg-slate-50 p-4 text-sm text-slate-700">
+              <p>
+                <span class="font-semibold text-slate-900">Selected plan:</span> {{ selectedPlan.planName }}
+              </p>
+              <p class="mt-1">
+                <span class="font-semibold text-slate-900">Billing:</span> {{ selectedPlan.titleSuffix }}
+              </p>
+              <p class="mt-1">
+                <span class="font-semibold text-slate-900">Price:</span> ${{ selectedPlan.pricePerMonthText }}/month
+              </p>
+            </div>
 
             <div class="mt-6 text-sm">
               <div class="flex items-center justify-between py-2">
