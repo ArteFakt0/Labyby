@@ -3,26 +3,29 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Api\Blog\PostController;
+// Імпортуємо всі контролери
+use App\Http\Controllers\Api\Blog\PostController; // Переконайся, що шлях правильний
 use App\Http\Controllers\Api\Blog\Admin\CategoryController;
+use App\Http\Controllers\Api\Blog\Admin\PostController as AdminPostController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::group(['namespace' => 'App\Http\Controllers\Api\Blog', 'prefix' => 'blog'], function () {
+// Публічні роути блогу
+Route::group(['prefix' => 'blog'], function () {
     Route::apiResource('posts', PostController::class)->names('blog.posts');
 });
 
 // Адмінка
-$groupData = [
-    'namespace' => 'App\Http\Controllers\Api\Blog\Admin',
-    'prefix' => 'admin/blog',
-];
-Route::group($groupData, function () {
+Route::group(['prefix' => 'admin/blog'], function () {
     // BlogCategory
-    $methods = ['index', 'store', 'update'];
     Route::apiResource('categories', CategoryController::class)
-        ->only($methods)
-        ->names('blog.admin.categories'); 
+        ->only(['index', 'store', 'update'])
+        ->names('blog.admin.categories');
+        
+    // BlogPost (Admin) - використовуємо Аліас AdminPostController, щоб не конфліктував з публічним
+    Route::apiResource('posts', AdminPostController::class)
+        ->except(['show'])
+        ->names('blog.admin.posts');
 });
