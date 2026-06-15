@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\Blog\Admin;
 
 //use App\Http\Controllers\Controller;
+use App\Http\Requests\BlogCategoryCreateRequest;
+use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Http\Controllers\Api\Blog\Admin\BaseController;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 use App\Models\BlogCategory;
 use Illuminate\Support\Str;
 
@@ -25,7 +27,7 @@ class CategoryController extends BaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BlogCategoryCreateRequest $request)
     {
         //dd(__METHOD__);
 
@@ -45,6 +47,25 @@ class CategoryController extends BaseController
         } else {
             return ['message' => 'Помилка збереження'];
         }
+
+
+
+        //оце во новий
+        $data = $request->input(); //отримаємо масив даних, які надійшли з форми
+        if (empty($data['slug'])) { //якщо псевдонім порожній
+            $data['slug'] = Str::slug($data['title']); //генеруємо псевдонім
+        }
+ 
+        $item = (new BlogCategory())->create($data); //створюємо об'єкт і додаємо в БД
+
+        if ($item) {
+            return [
+'success' => true,
+'message' => 'Успішно збережено'
+];
+        } else {
+            return ['message' => 'Помилка збереження'];
+        }
     }
 
     /**
@@ -58,7 +79,7 @@ class CategoryController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(BlogCategoryUpdateRequest $request, $id)
     {
        //dd(__METHOD__);
 
