@@ -1,12 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api\Blog;
+namespace App\Http\Controllers\Api\Blog\Admin;
 
 use App\Models\BlogPost;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use App\Jobs\BlogPostAfterCreateJob;
+use App\Jobs\BlogPostAfterDeleteJob;
 
 class PostController extends BaseController
 {
+    use DispatchesJobs;
+
     /**
      * Display a listing of the resource.
      */
@@ -22,7 +28,8 @@ class PostController extends BaseController
      */
     public function store(Request $request)
     {
-        //
+        $job = new BlogPostAfterCreateJob($item);
+            $this->dispatch($job);
     }
 
     /**
@@ -46,6 +53,6 @@ class PostController extends BaseController
      */
     public function destroy(string $id)
     {
-        //
+        BlogPostAfterDeleteJob::dispatch($id)->delay(20);
     }
 }
